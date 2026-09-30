@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CYBER-RED | Ultra-Contrast Fitness & Workout Dashboard</title>
+
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- FontAwesome 6 Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <!-- Google Fonts: Inter & Kanit for High-Legibility Typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Kanit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        /* Modern High-Contrast Color Tokens */
+        :root {
+            --bg-main: #0a0c10;
+            --bg-card: #151821;
+            --bg-card-hover: #1e2230;
+            --bg-input: #1c202c;
+            
+            /* Text Colors (Ensuring 100% legibility and high contrast ratio) */
+            --text-bright: #ffffff;
+            --text-main: #f0f3f8;
+            --text-muted: #a0aab8;
+            --text-dim: #cbd5e1;
+
+            /* Accent Colors */
+            --red-neon: #ff3b53;
+            --red-glow: rgba(255, 59, 83, 0.4);
+            --red-solid-btn: #e60026;
+            --red-solid-hover: #ff1a3d;
+
+            --green-done: #00e676;
+            --green-glow: rgba(0, 230, 118, 0.35);
+
+            --blue-rest: #64b5f6;
+            --gold-rest: #ffd54f;
+
+            /* Borders */
+            --border-subtle: #2b3140;
+            --border-neon: rgba(255, 59, 83, 0.6);
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            font-family: 'Kanit', 'Inter', sans-serif;
+            min-height: 100vh;
+            background-image: 
+                radial-gradient(circle at 15% 15%, rgba(255, 59, 83, 0.07) 0%, transparent 45%),
+                radial-gradient(circle at 85% 85%, rgba(255, 59, 83, 0.05) 0%, transparent 45%);
+            background-attachment: fixed;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* High Contrast Glass Panel */
+        .glass-panel {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+        }
+
+        .navbar-cyber {
+            background: #0f1117;
+            border-bottom: 2px solid var(--border-subtle);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        /* Form Customization for Maximum Visibility */
+        .form-label {
+            color: var(--text-dim) !important;
+            font-weight: 500;
+            font-size: 0.9rem;
+            margin-bottom: 6px;
+        }
+
+        .form-control, .form-select {
+            background-color: var(--bg-input);
+            border: 1.5px solid var(--border-subtle);
+            color: var(--text-bright) !important;
+            border-radius: 10px;
+            padding: 12px 14px;
+            font-weight: 500;
+        }
+
+        .form-control::placeholder {
+            color: #64748b;
+        }
+
+        .form-control:focus, .form-select:focus {
+            background-color: #222736;
+            border-color: var(--red-neon);
+            color: var(--text-bright) !important;
+            box-shadow: 0 0 0 0.25rem var(--red-glow);
+        }
+
+        /* Buttons with Vibrant Contrast */
+        .btn-red-neon {
+            background: linear-gradient(135deg, var(--red-solid-btn), #a8001c);
+            color: #ffffff !important;
+            font-weight: 700;
+            border: 1px solid var(--red-neon);
+            border-radius: 12px;
+            box-shadow: 0 4px 18px var(--red-glow);
+            transition: all 0.25 ease-in-out;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-red-neon:hover {
+            background: linear-gradient(135deg, var(--red-solid-hover), #c70022);
+            box-shadow: 0 6px 25px rgba(255, 59, 83, 0.7);
+            color: #ffffff !important;
+            transform: translateY(-2px);
+        }
+
+        /* Metric Result Cards */
+        .metric-card {
+            background: #181c27;
+            border: 1.5px solid var(--border-subtle);
+            border-left: 5px solid var(--red-neon);
+            border-radius: 14px;
+            padding: 16px;
+            transition: all 0.2s ease;
+        }
+
+        .metric-card:hover {
+            border-color: var(--border-neon);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 24px rgba(255, 59, 83, 0.2);
+        }
+
+        .metric-title {
+            color: var(--text-muted);
+            font-size: 0.82rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .metric-value {
+            color: var(--red-neon);
+            font-size: 1.8rem;
+            font-weight: 800;
+            text-shadow: 0 0 10px rgba(255, 59, 83, 0.3);
+        }
+
+        .metric-sub {
+            color: #ffffff;
+            font-weight: 500;
+            font-size: 0.85rem;
+        }
+
+        /* Workout Cards (Grid Layout) */
+        .workout-card {
+            background: var(--bg-card);
+            border: 1.5px solid var(--border-subtle);
+            border-radius: 16px;
+            padding: 22px;
+            transition: all 0.25s ease;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .workout-card.is-active {
+            border-left: 5px solid var(--red-neon);
+        }
+
+        .workout-card.is-rest {
+            border-left: 5px solid var(--blue-rest);
+            background: #12151e;
+        }
+
+        .workout-card.is-completed {
+            border-left: 5px solid var(--green-done);
+            background: #101e18;
+            border-color: rgba(0, 230, 118, 0.3);
+        }
+
+        .workout-card:hover {
+            transform: translateY(-4px);
+            background: var(--bg-card-hover);
+            border-color: var(--red-neon);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Distinct Day Badges */
+        .day-badge-workout {
+            background: var(--red-solid-btn);
+            color: #ffffff !important;
+            font-weight: 700;
+            padding: 6px 14px;
+            border-radius: 30px;
+            font-size: 0.85rem;
+            box-shadow: 0 2px 8px var(--red-glow);
+        }
+
+        .day-badge-rest {
+            background: #1f2a3a;
+            color: var(--blue-rest) !important;
+            border: 1px solid rgba(100, 181, 246, 0.4);
+            font-weight: 700;
+            padding: 6px 14px;
+            border-radius: 30px;
+            font-size: 0.85rem;
+        }
+
+        /* Checkbox for Exercise Progress */
+        .check-circle {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: 2px solid var(--text-muted);
+            background: var(--bg-input);
+            color: transparent;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .check-circle:hover {
+            border-color: var(--red-neon);
+            color: var(--red-neon);
+        }
+
+        .workout-card.is-completed .check-circle,
+        .tr-completed .check-circle {
+            background: var(--green-done);
+            border-color: var(--green-done);
+            color: #000000 !important;
+            box-shadow: 0 0 12px var(--green-glow);
+        }
+
+        /* Exercise Tag Badges (High Contrast Text) */
+        .exercise-tag {
+            background: #232836;
+            border: 1px solid #363e52;
+            border-radius: 8px;
+            padding: 7px 13px;
+            font-size: 0.88rem;
+            color: var(--text-bright) !important; /* Pure Crisp White */
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .exercise-tag i {
+            color: var(--red-neon);
+        }
+
+        .exercise-tag-rest {
+            background: #1c2331;
+            border: 1px solid #2c384e;
+            color: var(--gold-rest) !important; /* Gold contrasting rest text */
+        }
+
+        /* Progress Bar Styling */
+        .progress-box {
+            background: var(--bg-card);
+            border: 1.5px solid var(--border-subtle);
+            border-radius: 14px;
+            padding: 18px 22px;
+        }
+
+        .progress {
+            height: 12px;
+            background-color: #1e2330;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid var(--border-subtle);
+        }
+
+        .progress-bar {
+            background: linear-gradient(90deg, #b3001e, var(--red-neon));
+            box-shadow: 0 0 12px var(--red-neon);
+            transition: width 0.4s ease;
+        }
+
+        /* High Contrast Table View */
+        .modern-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 10px;
+        }
+
+        .modern-table th {
+            color: #cbd5e1;
+            font-weight: 700;
+            padding: 14px 18px;
+            text-transform: uppercase;
+            font-size: 0.82rem;
+            letter-spacing: 1px;
+            border: none;
+        }
+
+        .modern-table tbody tr {
+            background: var(--bg-card);
+            transition: all 0.2s ease;
+        }
+
+        .modern-table tbody tr:hover {
+            background: var(--bg-card-hover);
+        }
+
+        .modern-table td {
+            padding: 18px;
+            vertical-align: middle;
+            border-top: 1px solid var(--border-subtle);
+            border-bottom: 1px solid var(--border-subtle);
+            color: var(--text-bright);
+        }
+
+        .modern-table td:first-child {
+            border-left: 1px solid var(--border-subtle);
+            border-top-left-radius: 12px;
+            border-bottom-left-radius: 12px;
+        }
+
+        .modern-table td:last-child {
+            border-right: 1px solid var(--border-subtle);
+            border-top-right-radius: 12px;
+            border-bottom-right-radius: 12px;
+        }
+
+        /* View Toggle Buttons */
+        .btn-toggle-view {
+            background: var(--bg-input);
+            border: 1px solid var(--border-subtle);
+            color: var(--text-muted);
+            padding: 9px 18px;
+            border-radius: 10px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        .btn-toggle-view.active, .btn-toggle-view:hover {
+            background: var(--red-solid-btn);
+            color: #ffffff !important;
+            border-color: var(--red-neon);
+            box-shadow: 0 0 12px var(--red-glow);
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-cyber py-3 mb-4">
+        <div class="container">
+            <div class="d-flex align-items-center gap-3">
+                <div class="rounded-3 p-2 px-3 text-white" style="background: linear-gradient(135deg, var(--red-solid-btn), #800014); box-shadow: 0 0 15px var(--red-glow);">
+                    <i class="fa-solid fa-bolt-lightning fs-4"></i>
+                </div>
+                <div>
+                    <h4 class="mb-0 fw-bold tracking-wide text-white">CYBER-RED <span style="color: var(--red-neon);">FITNESS DASHBOARD</span></h4>
+                    <small style="color: var(--text-muted); font-size: 0.88rem;">คำนวณโภชนาการ และจัดตารางออกกำลังกายแบบตัวอักษรคมชัดสูง</small>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container pb-5">
+        <div class="row g-4">
+            <!-- Left Side: User Inputs -->
+            <div class="col-lg-5">
+                <div class="glass-panel p-4">
+                    <div class="d-flex align-items-center gap-2 mb-4 pb-2 border-bottom border-secondary border-opacity-25">
+                        <i class="fa-solid fa-sliders text-danger fs-5"></i>
+                        <h5 class="mb-0 fw-bold text-white">ป้อนข้อมูลร่างกาย & เป้าหมาย</h5>
+                    </div>
+
+                    <form id="fitnessForm">
+                        <div class="row g-3 mb-3">
+                            <div class="col-6">
+                                <label class="form-label">เพศ</label>
+                                <select class="form-select" id="gender" required>
+                                    <option value="male" selected>ชาย (Male)</option>
+                                    <option value="female">หญิง (Female)</option>
+                                </select>
+                            </div>
+                            <div class="col-6">
+                                <label class="form-label">อายุ (ปี)</label>
+                                <input type="number" class="form-control" id="age" value="25" min="10" max="100" required>
+                            </div>
+                        </div>
+
+                        <div class="row g-3 mb-3">
+                            <div class="col-6">
+                                <label class="form-label">น้ำหนัก (kg)</label>
+                                <input type="number" step="0.1" class="form-control" id="weight" value="70" required>
+                            </div>
+                            <div class="col-6">
+                                <label class="form-label">ส่วนสูง (cm)</label>
+                                <input type="number" step="0.1" class="form-control" id="height" value="175" required>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">ระดับกิจกรรมรายสัปดาห์</label>
+                            <select class="form-select" id="activity" required>
+                                <option value="1.2">นั่งทำงานเป็นหลัก / ไม่ค่อยออกกำลังกาย</option>
+                                <option value="1.375">ออกกำลังกายเบาๆ 1-3 วัน/สัปดาห์</option>
+                                <option value="1.55" selected>ออกกำลังกายปานกลาง 3-5 วัน/สัปดาห์</option>
+                                <option value="1.725">ออกกำลังกายหนัก 6-7 วัน/สัปดาห์</option>
+                            </select>
+                        </div>
+
+                        <div class="row g-3 mb-4">
+                            <div class="col-12 mb-2">
+                                <label class="form-label">เป้าหมายทางฟิตเนส</label>
+                                <select class="form-select" id="goal" required>
+                                    <option value="fatloss" selected>ลดน้ำหนัก / ลดไขมัน (-500 kcal)</option>
+                                    <option value="maintain">รักษาน้ำหนัก / เพิ่มความอึด</option>
+                                    <option value="hypertrophy">สร้างกล้ามเนื้อ (+300 kcal)</option>
+                                </select>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label">จำนวนวันที่ต้องการฝึก</label>
+                                <select class="form-select" id="days" required>
+                                    <option value="3">3 วัน / สัปดาห์ (Full Body Split)</option>
+                                    <option value="4" selected>4 วัน / สัปดาห์ (Upper/Lower Split)</option>
+                                    <option value="5">5 วัน / สัปดาห์ (Push/Pull/Legs Split)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-red-neon w-100 py-3 fs-6">
+                            <i class="fa-solid fa-calculator me-2"></i>คำนวณและสร้างตารางฝึก
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Right Side: Metrics & Weekly Schedule Display -->
+            <div class="col-lg-7">
+                <!-- Calculated Health Metrics -->
+                <div id="resultsContainer" class="row g-3 mb-4">
+                    <div class="col-6 col-md-3">
+                        <div class="metric-card">
+                            <span class="metric-title">BMI</span>
+                            <div id="bmiValue" class="metric-value my-1">22.9</div>
+                            <div id="bmiCategory" class="metric-sub">สมส่วน / ปกติ</div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <div class="metric-card">
+                            <span class="metric-title">Body Fat %</span>
+                            <div id="fatValue" class="metric-value my-1">16.8%</div>
+                            <div class="metric-sub">ประมาณการสัดส่วน</div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <div class="metric-card">
+                            <span class="metric-title">BMR</span>
+                            <div id="bmrValue" class="metric-value my-1">1,662</div>
+                            <div class="metric-sub">kcal / วัน</div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <div class="metric-card">
+                            <span class="metric-title">Target Cal</span>
+                            <div id="targetCalValue" class="metric-value my-1">2,076</div>
+                            <div class="metric-sub">kcal / วัน</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Progress Tracker and Layout Switcher -->
+                <div class="progress-box d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
+                    <div class="flex-grow-1" style="min-width: 220px;">
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="fw-bold" style="color: var(--text-dim); font-size: 0.9rem;">ความคืบหน้าสัปดาห์นี้</span>
+                            <span id="progressText" class="fw-bold text-white" style="font-size: 0.9rem;">0 / 7 วัน (0%)</span>
+                        </div>
+                        <div class="progress">
+                            <div id="progressBar" class="progress-bar" style="width: 0%"></div>
+                        </div>
+                    </div>
+
+                    <div class="d-flex align-items-center gap-2">
+                        <div class="btn-group p-1 glass-panel" role="group">
+                            <button type="button" id="btnGridView" class="btn btn-toggle-view active" title="Cards View">
+                                <i class="fa-solid fa-grip me-1"></i> Cards
+                            </button>
+                            <button type="button" id="btnTableView" class="btn btn-toggle-view" title="Table View">
+                                <i class="fa-solid fa-list-check me-1"></i> Table
+                            </button>
+                        </div>
+                        <button id="resetBtn" class="btn btn-outline-secondary btn-sm p-2 rounded-3" title="รีเซ็ตความคืบหน้า" style="border-color: var(--border-subtle); color: var(--text-muted);">
+                            <i class="fa-solid fa-rotate-left fs-6"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Grid View (Cards) -->
+                <div id="gridView" class="row g-3">
+                    <!-- Injected dynamically via JS -->
+                </div>
+
+                <!-- Table View -->
+                <div id="tableView" class="d-none">
+                    <div class="table-responsive">
+                        <table class="modern-table">
+                            <thead>
+                                <tr>
+                                    <th style="width: 15%">วัน</th>
+                                    <th style="width: 30%">ส่วนที่เน้น (Focus)</th>
+                                    <th style="width: 45%">ท่าออกกำลังกายแนะนำ</th>
+                                    <th style="width: 10%" class="text-center">เสร็จสิ้น</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tableBody">
+                                <!-- Injected dynamically via JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Workout Schedule Database
+        const workoutDatabase = {
+            3: [
+                { id: "day1", day: "จันทร์", focus: "Full Body A", icon: "fa-dumbbell", type: "workout", exercises: ["Squats", "Bench Press", "Barbell Row", "Plank Hold"] },
+                { id: "day2", day: "อังคาร", focus: "วันพักผ่อน (Rest)", icon: "fa-bed", type: "rest", exercises: ["Active Recovery", "ยืดเหยียดกล้ามเนื้อ"] },
+                { id: "day3", day: "พุธ", focus: "Full Body B", icon: "fa-bolt", type: "workout", exercises: ["Deadlift", "Overhead Press", "Lat Pulldown", "Walking Lunges"] },
+                { id: "day4", day: "พฤหัสบดี", focus: "วันพักผ่อน (Rest)", icon: "fa-couch", type: "rest", exercises: ["พักผ่อนฟื้นฟูกล้ามเนื้อ"] },
+                { id: "day5", day: "ศุกร์", focus: "Full Body C", icon: "fa-child-reaching", type: "workout", exercises: ["Leg Press", "Incline Dumbbell Press", "Cable Row", "Leg Curl"] },
+                { id: "day6", day: "เสาร์", focus: "คาร์ดิโอเบาๆ", icon: "fa-heart-pulse", type: "rest", exercises: ["เดินเร็ว Zone 2 (30-45 นาที)"] },
+                { id: "day7", day: "อาทิตย์", focus: "วันพักผ่อน (Rest)", icon: "fa-bed", type: "rest", exercises: ["พักผ่อนร่างกายเต็มที่"] }
+            ],
+            4: [
+                { id: "day1", day: "จันทร์", focus: "Upper Body (ส่วนบน)", icon: "fa-dumbbell", type: "workout", exercises: ["Bench Press", "Bent-over Row", "Overhead Press", "Bicep Curls"] },
+                { id: "day2", day: "อังคาร", focus: "Lower Body (ส่วนล่าง)", icon: "fa-bolt", type: "workout", exercises: ["Barbell Squats", "Romanian Deadlift", "Leg Press", "Calf Raises"] },
+                { id: "day3", day: "พุธ", focus: "วันพักผ่อน (Rest)", icon: "fa-couch", type: "rest", exercises: ["Active Recovery", "เดินพักผ่อน"] },
+                { id: "day4", day: "พฤหัสบดี", focus: "Upper Body (เน้นหลัง/ไหล่)", icon: "fa-child-reaching", type: "workout", exercises: ["Lat Pulldown", "Incline Dumbbell Press", "Face Pulls", "Lateral Raises"] },
+                { id: "day5", day: "ศุกร์", focus: "Lower Body + Core", icon: "fa-fire", type: "workout", exercises: ["Bulgarian Split Squats", "Hamstring Curls", "Planks", "Ab Rollout"] },
+                { id: "day6", day: "เสาร์", focus: "วันพักผ่อน (Rest)", icon: "fa-bed", type: "rest", exercises: ["พักผ่อนฟื้นฟูกล้ามเนื้อ"] },
+                { id: "day7", day: "อาทิตย์", focus: "วันพักผ่อน (Rest)", icon: "fa-bed", type: "rest", exercises: ["นอนหลับฟื้นฟูร่างกาย"] }
+            ],
+            5: [
+                { id: "day1", day: "จันทร์", focus: "Push (อก/ไหล่/หลังแขน)", icon: "fa-dumbbell", type: "workout", exercises: ["Bench Press", "Dumbbell Press", "Incline Fly", "Tricep Pushdown"] },
+                { id: "day2", day: "อังคาร", focus: "Pull (หลัง/หน้าแขน)", icon: "fa-child-reaching", type: "workout", exercises: ["Deadlift", "Pull-ups", "Barbell Row", "Hammer Curls"] },
+                { id: "day3", day: "พุธ", focus: "Legs (ขา/ท้อง)", icon: "fa-bolt", type: "workout", exercises: ["Barbell Squats", "Leg Extension", "Romanian Deadlift", "Hanging Leg Raise"] },
+                { id: "day4", day: "พฤหัสบดี", focus: "วันพักผ่อน (Rest)", icon: "fa-couch", type: "rest", exercises: ["พักผ่อน"] },
+                { id: "day5", day: "ศุกร์", focus: "Upper Body Flex", icon: "fa-fire", type: "workout", exercises: ["Incline Press", "Lat Pulldown", "Lateral Raises", "Cable Curls"] },
+                { id: "day6", day: "เสาร์", focus: "Lower Body & Core", icon: "fa-dumbbell", type: "workout", exercises: ["Leg Press", "Walking Lunges", "Calf Raises", "Russian Twists"] },
+                { id: "day7", day: "อาทิตย์", focus: "วันพักผ่อน (Rest)", icon: "fa-bed", type: "rest", exercises: ["พักผ่อนเต็มที่"] }
+            ]
+        };
+
+        // Persistent State for Completion
+        let completedDays = JSON.parse(localStorage.getItem('cyber_red_completed')) || {};
+
+        // DOM Elements
+        const fitnessForm = document.getElementById('fitnessForm');
+        const gridView = document.getElementById('gridView');
+        const tableView = document.getElementById('tableView');
+        const tableBody = document.getElementById('tableBody');
+        const btnGridView = document.getElementById('btnGridView');
+        const btnTableView = document.getElementById('btnTableView');
+        const progressBar = document.getElementById('progressBar');
+        const progressText = document.getElementById('progressText');
+        const resetBtn = document.getElementById('resetBtn');
+
+        function calculateAndRender() {
+            const gender = document.getElementById('gender').value;
+            const age = parseInt(document.getElementById('age').value);
+            const weight = parseFloat(document.getElementById('weight').value);
+            const height = parseFloat(document.getElementById('height').value);
+            const activity = parseFloat(document.getElementById('activity').value);
+            const goal = document.getElementById('goal').value;
+            const days = document.getElementById('days').value;
+
+            // 1. Calculate BMI
+            const heightM = height / 100;
+            const bmi = (weight / (heightM * heightM)).toFixed(1);
+            let bmiCat = "สมส่วน / ปกติ";
+            if (bmi < 18.5) bmiCat = "น้ำหนักน้อย";
+            else if (bmi < 23) bmiCat = "สมส่วน / ปกติ";
+            else if (bmi < 25) bmiCat = "น้ำหนักเกิน";
+            else bmiCat = "อ้วน";
+
+            // 2. Estimate Body Fat %
+            const genderFactor = (gender === 'male') ? 1 : 0;
+            const bodyFat = Math.max(5, (1.20 * bmi) + (0.23 * age) - (10.8 * genderFactor) - 5.4).toFixed(1);
+
+            // 3. Calculate BMR & Target Calories
+            let bmr = (gender === 'male') 
+                ? (10 * weight) + (6.25 * height) - (5 * age) + 5
+                : (10 * weight) + (6.25 * height) - (5 * age) - 161;
+
+            const tdee = bmr * activity;
+            let targetCal = tdee;
+            if (goal === 'fatloss') targetCal -= 500;
+            else if (goal === 'hypertrophy') targetCal += 300;
+
+            // Update Header Metric Displays
+            document.getElementById('bmiValue').textContent = bmi;
+            document.getElementById('bmiCategory').textContent = bmiCat;
+            document.getElementById('fatValue').textContent = `${bodyFat}%`;
+            document.getElementById('bmrValue').textContent = Math.round(bmr).toLocaleString();
+            document.getElementById('targetCalValue').textContent = Math.round(targetCal).toLocaleString();
+
+            // Render Schedule
+            renderSchedule(days);
+        }
+
+        function renderSchedule(days) {
+            gridView.innerHTML = '';
+            tableBody.innerHTML = '';
+
+            const currentData = workoutDatabase[days] || workoutDatabase[4];
+            let completedCount = 0;
+
+            currentData.forEach(item => {
+                const isCompleted = !!completedDays[item.id];
+                if (isCompleted) completedCount++;
+
+                const isRest = item.type === 'rest';
+
+                // --- Render Cards Grid ---
+                const col = document.createElement('div');
+                col.className = 'col-md-6';
+                col.innerHTML = `
+                    <div class="workout-card ${isRest ? 'is-rest' : 'is-active'} ${isCompleted ? 'is-completed' : ''}">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <span class="${isRest ? 'day-badge-rest' : 'day-badge-workout'}">
+                                ${item.day}
+                            </span>
+                            <div class="check-circle" onclick="toggleComplete('${item.id}', '${days}')" title="ทำเครื่องหมายเสร็จสิ้น">
+                                <i class="fa-solid fa-check fs-6"></i>
+                            </div>
+                        </div>
+
+                        <div class="d-flex align-items-center gap-2 mb-3">
+                            <i class="fa-solid ${item.icon} fs-5 ${isRest ? 'text-info' : 'text-danger'}"></i>
+                            <h6 class="mb-0 fw-bold text-white fs-6">${item.focus}</h6>
+                        </div>
+
+                        <div class="d-flex flex-wrap gap-2 mt-auto">
+                            ${item.exercises.map(ex => `
+                                <span class="exercise-tag ${isRest ? 'exercise-tag-rest' : ''}">
+                                    <i class="fa-solid fa-angle-right"></i> ${ex}
+                                </span>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+                gridView.appendChild(col);
+
+                // --- Render Modern Table ---
+                const tr = document.createElement('tr');
+                if (isCompleted) tr.className = 'tr-completed opacity-75';
+                tr.innerHTML = `
+                    <td><span class="fw-bold ${isRest ? 'text-info' : 'text-danger'}">${item.day}</span></td>
+                    <td>
+                        <div class="d-flex align-items-center gap-2">
+                            <i class="fa-solid ${item.icon} ${isRest ? 'text-info' : 'text-danger'}"></i>
+                            <span class="fw-semibold text-white">${item.focus}</span>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="d-flex flex-wrap gap-1">
+                            ${item.exercises.map(ex => `<span class="exercise-tag ${isRest ? 'exercise-tag-rest' : ''} py-1">${ex}</span>`).join('')}
+                        </div>
+                    </td>
+                    <td class="text-center">
+                        <div class="check-circle mx-auto" onclick="toggleComplete('${item.id}', '${days}')">
+                            <i class="fa-solid fa-check fs-6"></i>
+                        </div>
+                    </td>
+                `;
+                tableBody.appendChild(tr);
+            });
+
+            // Update Progress Bar
+            const percent = Math.round((completedCount / currentData.length) * 100);
+            progressBar.style.width = `${percent}%`;
+            progressText.innerText = `${completedCount} / ${currentData.length} วัน (${percent}%)`;
+        }
+
+        function toggleComplete(id, days) {
+            completedDays[id] = !completedDays[id];
+            localStorage.setItem('cyber_red_completed', JSON.stringify(completedDays));
+            renderSchedule(days || document.getElementById('days').value);
+        }
+
+        // Layout Toggle Controls
+        btnGridView.addEventListener('click', () => {
+            btnGridView.classList.add('active');
+            btnTableView.classList.remove('active');
+            gridView.classList.remove('d-none');
+            tableView.classList.add('d-none');
+        });
+
+        btnTableView.addEventListener('click', () => {
+            btnTableView.classList.add('active');
+            btnGridView.classList.remove('active');
+            tableView.classList.remove('d-none');
+            gridView.classList.add('d-none');
+        });
+
+        fitnessForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            calculateAndRender();
+        });
+
+        resetBtn.addEventListener('click', () => {
+            if (confirm('คุณต้องการรีเซ็ตการติ๊กความคืบหน้าประจำสัปดาห์ใช่หรือไม่?')) {
+                completedDays = {};
+                localStorage.removeItem('cyber_red_completed');
+                calculateAndRender();
+            }
+        });
+
+        // Initialize App
+        calculateAndRender();
+    </script>
+</body>
+</html>
